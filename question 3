@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+struct Edge {
+    int u, v, w;
+};
+int parent[100];
+int findp(int x) {
+    if (parent[x] == x) return x;
+    return parent[x] = findp(parent[x]);
+}
+void unite(int a, int b) {
+    a = findp(a);
+    b = findp(b);
+    parent[b] = a;
+}
+int main() {
+    int V, E;
+    cin >> V >> E;
+Edge edges[200];
+    for (int i = 0; i < E; i++)
+        cin >> edges[i].u >> edges[i].v >> edges[i].w;
+for (int i = 0; i < V; i++)
+        parent[i] = i;
+for (int i = 0; i < E - 1; i++)
+        for (int j = i + 1; j < E; j++)
+            if (edges[j].w < edges[i].w) {
+                Edge temp = edges[i];
+                edges[i] = edges[j];
+                edges[j] = temp;
+            }
+    int mst = 0;
+    for (int i = 0; i < E; i++) {
+        int u = edges[i].u;
+        int v = edges[i].v;
+        int w = edges[i].w;
+if (findp(u) != findp(v)) {
+            unite(u, v);
+            mst += w;
+        }
+    }
+cout << mst;
+return 0;
+}
